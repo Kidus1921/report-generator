@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Processed Results</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='result_style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='sidebar.css') }}">
+
+</head>
+<body>
+    {% include 'sidebar.html' %}
+
+    <div class="container">
+        <h1>Processed Results</h1>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Sales</th>
+                    <th>Advance</th>
+                    <th>Credit</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        <h3>Summarized</h3>
+                        <ul>
+                            {% for file in sales_summarized %}
+                                <li><a href="{{ url_for('static', filename='results/' + file) }}">{{ file }}</a></li>
+                            {% endfor %}
+                        </ul>
+                        <h3>Excluded</h3>
+                        <ul>
+                            {% for file in sales_excluded %}
+                                <li><a href="{{ url_for('static', filename='results/' + file) }}">{{ file }}</a></li>
+                            {% endfor %}
+                        </ul>
+                    </td>
+
+                    <td>
+                        <h3>Summarized</h3>
+                        <ul>
+                            {% for file in advance_summarized %}
+                                <li><a href="{{ url_for('static', filename='results/' + file) }}">{{ file }}</a></li>
+                            {% endfor %}
+                        </ul>
+                        <h3>Excluded</h3>
+                        <ul>
+                            {% for file in advance_excluded %}
+                                <li><a href="{{ url_for('static', filename='results/' + file) }}">{{ file }}</a></li>
+                            {% endfor %}
+                        </ul>
+                    </td>
+
+                    <td>
+                        <h3>Summarized</h3>
+                        <ul>
+                            {% for file in credit_summarized %}
+                                <li><a href="{{ url_for('static', filename='results/' + file) }}">{{ file }}</a></li>
+                            {% endfor %}
+                        </ul>
+                        <h3>Excluded</h3>
+                        <ul>
+                            {% for file in credit_excluded %}
+                                <li><a href="{{ url_for('static', filename='results/' + file) }}">{{ file }}</a></li>
+                            {% endfor %}
+                        </ul>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <ul>
+            <li><a href="{{ url_for('download_file', filename='classified_departments.xlsx') }}">Download Classified Departments</a></li>
+            <li><a href="{{ url_for('download_file', filename='remaining_items.xlsx') }}">Download Remaining Items</a></li>
+        </ul>
+
+        <div class="btn-container">
+            <a href="{{ url_for('index') }}" class="btn btn-success">Back to Upload Page</a>
+        </div>
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Responsive Dashboard with Sidebar Toggle</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='dashboard.css') }}"
+    />
+    <link rel="stylesheet" href="{{ url_for('static', filename='sidebar.css') }}">
+
+  </head>
+  <body>
+    {% include 'sidebar.html' %}
+    <div class="site-wrap">
+      <nav class="site-nav hidden">
+        <div class="sidebar-toggle">➤</div>
+        <div class="name">Pepper</div>
+        <ul>
+          <li class="active"><a href="#">Deals</a></li>
+          <li><a href="#">Activities</a></li>
+          <li><a href="#">Asset Libraries</a></li>
+          <li><a href="#">Funds</a></li>
+          <li><a href="#">Investors</a></li>
+          <li><a href="#">Reports</a></li>
+        </ul>
+        <div class="note">
+          <h3>Your Monthly Report</h3>
+          <p>
+            Get the latest insights on deals, pros, cons, and build your
+            roadmap.
+          </p>
+        </div>
+      </nav>
+
+      <main class="expanded">
+        <header>
+          <h1 class="title">All Report Results</h1>
+          <nav class="nav-tabs">
+            <a href="#" class="tab-link active" data-target="pharmacy-report"
+              >Pharmacy Report <span>14</span></a
+            >
+            <a href="#" class="tab-link" data-target="classified-departments"
+              >Classified Departments <span>8</span></a
+            >
+            <a href="#" class="tab-link" data-target="reports"
+              >Reports <span>15</span></a
+            >
+            <a href="#" class="tab-link" data-target="credit-reports"
+            >Credits <span>25</span></a>
+          </nav>
+        </header>
+        <div class="tab-content">
+          <div id="pharmacy-report" class="content-section active">
+            <h2>Pharmacy Report</h2>
+            <div class="content-columns">
+          
+              <!-- Sales Column -->
+              <div class="col">
+                <div class="header-title">Sales</div>
+                {% set grouped_sales = {} %}
+          
+                {% for file in sales_summarized + sales_excluded %}
+                  {% set date = file.split('_')[-1].split('.')[0] %} {# Extract date from filename #}
+                  {% if date not in grouped_sales %}
+                    {% set _ = grouped_sales.update({date: {"summarized": [], "excluded": []}}) %}
+                  {% endif %}
+                  {% if file in sales_summarized %}
+                    {% set _ = grouped_sales[date]["summarized"].append(file) %}
+                  {% else %}
+                    {% set _ = grouped_sales[date]["excluded"].append(file) %}
+                  {% endif %}
+                {% endfor %}
+          
+                {% for date, files in grouped_sales.items() %}
+                <div class="item">
+                  <h3>Sales Report ({{ date }})</h3>
+                  {% if files.summarized %}
+                  <h4>Summarized</h4>
+                  <ul>
+                    {% for file in files.summarized %}
+                    <li><a href="{{ url_for('static', filename='results/' + file) }}">{{ file }}</a></li>
+                    {% endfor %}
+                  </ul>
+                  {% endif %}
+          
+                  {% if files.excluded %}
+                  <h4>Excluded</h4>
+                  <ul>
+                    {% for file in files.excluded %}
+                    <li><a href="{{ url_for('static', filename='results/' + file) }}">{{ file }}</a></li>
+                    {% endfor %}
+                  </ul>
+                  {% endif %}
+                </div>
+                {% endfor %}
+              </div>
+          
+              <!-- Advance Column -->
+              <div class="col">
+                <div class="header-title">Advance</div>
+                {% set grouped_advance = {} %}
+          
+                {% for file in advance_summarized + advance_excluded %}
+                  {% set date = file.split('_')[-1].split('.')[0] %}
+                  {% if date not in grouped_advance %}
+                    {% set _ = grouped_advance.update({date: {"summarized": [], "excluded": []}}) %}
+                  {% endif %}
+                  {% if file in advance_summarized %}
+                    {% set _ = grouped_advance[date]["summarized"].append(file) %}
+                  {% else %}
+                    {% set _ = grouped_advance[date]["excluded"].append(file) %}
+                  {% endif %}
+                {% endfor %}
+          
+                {% for date, files in grouped_advance.items() %}
+                <div class="item">
+                  <h3>Advance Report ({{ date }})</h3>
+                  {% if files.summarized %}
+                  <h4>Summarized</h4>
+                  <ul>
+                    {% for file in files.summarized %}
+                    <li><a href="{{ url_for('static', filename='results/' + file) }}">{{ file }}</a></li>
+                    {% endfor %}
+                  </ul>
+                  {% endif %}
+          
+                  {% if files.excluded %}
+                  <h4>Excluded</h4>
+                  <ul>
+                    {% for file in files.excluded %}
+                    <li><a href="{{ url_for('static', filename='results/' + file) }}">{{ file }}</a></li>
+                    {% endfor %}
+                  </ul>
+                  {% endif %}
+                </div>
+                {% endfor %}
+              </div>
+          
+              <!-- Credit Column -->
+              <div class="col">
+                <div class="header-title">Credit</div>
+                {% set grouped_credit = {} %}
+          
+                {% for file in credit_summarized + credit_excluded %}
+                  {% set date = file.split('_')[-1].split('.')[0] %}
+                  {% if date not in grouped_credit %}
+                    {% set _ = grouped_credit.update({date: {"summarized": [], "excluded": []}}) %}
+                  {% endif %}
+                  {% if file in credit_summarized %}
+                    {% set _ = grouped_credit[date]["summarized"].append(file) %}
+                  {% else %}
+                    {% set _ = grouped_credit[date]["excluded"].append(file) %}
+                  {% endif %}
+                {% endfor %}
+          
+                {% for date, files in grouped_credit.items() %}
+                <div class="item">
+                  <h3>Credit Report ({{ date }})</h3>
+                  {% if files.summarized %}
+                  <h4>Summarized</h4>
+                  <ul>
+                    {% for file in files.summarized %}
+                    <li><a href="{{ url_for('static', filename='results/' + file) }}">{{ file }}</a></li>
+                    {% endfor %}
+                  </ul>
+                  {% endif %}
+          
+                  {% if files.excluded %}
+                  <h4>Excluded</h4>
+                  <ul>
+                    {% for file in files.excluded %}
+                    <li><a href="{{ url_for('static', filename='results/' + file) }}">{{ file }}</a></li>
+                    {% endfor %}
+                  </ul>
+                  {% endif %}
+                </div>
+                {% endfor %}
+              </div>
+          
+            </div>
+          </div>
+                    
+          <div id="classified-departments" class="content-section">
+            <h2>Classified Departments</h2>
+            <p>
+                This section contains detailed reports on various classified
+                departments, categorized based on operational and financial
+                metrics.
+            </p>
+            <ul>
+                {% for file in classified_files %}
+                    <li>
+                        <a href="{{ url_for('static', filename='results/' + file) }}">{{ file }}</a>
+                    </li>
+                {% else %}
+                    <p>No classified reports available.</p>
+                {% endfor %}
+            </ul>
+        </div>
+        
+            <div id="reports" class="content-section">
+              <h2>Reports</h2>
+              <p>
+                Here, you will find various analytical reports that provide
+                insights into business performance and operational statistics.
+              </p>
+            </div>
+            <div id="credit-reports" class="content-section">
+              <h2>Credit Reports</h2>
+              <ul>
+                  {% for file in credit_reports %}
+                      {% if file.startswith('Credit_result') %}
+                          {% set file_parts = file.rsplit('_', 1) %}  {# Splits at the last underscore #}
+                          {% set date_part = file_parts[1].split('.')[0] if file_parts|length > 1 else 'Unknown Date' %}
+                          
+                          {# Format the date (Assuming YYYYMMDD format) #}
+                          {% if date_part|length == 8 and date_part.isdigit() %}
+                              {% set formatted_date = date_part[:4] ~ '-' ~ date_part[4:6] ~ '-' ~ date_part[6:8] %}
+                          {% else %}
+                              {% set formatted_date = 'Invalid Date' %}
+                          {% endif %}
+          
+                          <li>
+                              <a href="{{ url_for('static', filename='results/' + file) }}">{{ file }}</a>
+                              <span class="file-date">({{ formatted_date }})</span>
+                          </li>
+                      {% endif %}
+                  {% endfor %}
+              </ul>
+          </div>
+                    
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <script>
+      const sidebar = document.querySelector(".site-nav");
+      const sidebarToggle = document.querySelector(".sidebar-toggle");
+      const mainContent = document.querySelector("main");
+
+      sidebarToggle.addEventListener("click", () => {
+        const isHidden = sidebar.classList.contains("hidden");
+        sidebar.classList.toggle("hidden", !isHidden);
+        mainContent.classList.toggle("collapsed", !isHidden);
+        sidebarToggle.textContent = isHidden ? "◀" : "➤";
+      });
+
+      document.addEventListener("DOMContentLoaded", function () {
+        // Function to extract date from filename
+        function extractDateFromFilename(filename) {
+          const datePattern = /(\d{4}-\d{2}-\d{2})/; // Regex to match date (YYYY-MM-DD)
+          const match = filename.match(datePattern);
+          return match ? match[1] : null;
+        }
+
+        // Process all item divs within each column
+        const columns = document.querySelectorAll(".col");
+        columns.forEach((column) => {
+          const items = column.querySelectorAll(".item");
+          items.forEach((item) => {
+            const links = item.querySelectorAll("a"); // Find all file links in the item
+            links.forEach((link) => {
+              const filename = link.textContent.trim(); // Get the file name
+              const date = extractDateFromFilename(filename); // Extract the date
+
+              if (date) {
+                // Create and add a date element to the item div
+                const dateElement = document.createElement("div");
+                dateElement.classList.add("date-display");
+                dateElement.textContent = date;
+
+                // Append to the item div (right corner)
+                item.style.position = "relative"; // Ensure position is set for absolute placement
+                item.appendChild(dateElement);
+              }
+            });
+          });
+        });
+      });
+
+      document.addEventListener("DOMContentLoaded", () => {
+        const tabs = document.querySelectorAll(".tab-link");
+        const sections = document.querySelectorAll(".content-section");
+
+        tabs.forEach((tab) => {
+          tab.addEventListener("click", (e) => {
+            e.preventDefault();
+
+            // Remove active class from all tabs
+            tabs.forEach((t) => t.classList.remove("active"));
+
+            // Add active class to clicked tab
+            tab.classList.add("active");
+
+            // Get the target section
+            const targetId = tab.getAttribute("data-target");
+
+            // Hide all sections
+            sections.forEach((section) => {
+              section.classList.remove("active");
+            });
+
+            // Show the target section
+            const targetSection = document.getElementById(targetId);
+            targetSection.classList.add("active");
+          });
+        });
+      });
+    </script>
+  </body>
+</html>
